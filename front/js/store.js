@@ -1,46 +1,112 @@
+// Affichage du formulaire d'ajout de contact
+main.innerHTML = `
+  <section>
+      <h2>Ajouter un nouveau contact</h2>
+      <p id="error" class="error hidden"></p>
 
-main.innerHTML =`
-    <section>
-        <form id="contactForm">
-            <input type="text" name="prenom" placeholder="Prénom" required>
-            <input type="text" name="nom" placeholder="Nom" required>
-            <input type="email" name="email" placeholder="Email" required>
-            <input type="text" name="telephone" placeholder="Téléphone" required>
-            <button type="submit">Envoyer</button>
-        </form>
-    </section>`;
+      <form id="contactForm">
+          <div>
+              <label for="prenom">Prénom</label>
+              <input type="text" name="prenom" id="prenom" placeholder="Ex : Jean" required>
+          </div>
 
-document.getElementById("contactForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+          <div>
+              <label for="nom">Nom</label>
+              <input type="text" name="nom" id="nom" placeholder="Ex : Dupont" required>
+          </div>
 
-  const form = e.target;
+          <div>
+              <label for="email">Email</label>
+              <input type="email" name="email" id="email" placeholder="Ex : jean.dupont@email.com" required>
+          </div>
 
-  const data = {
-    prenom: form.prenom.value,
-    nom: form.nom.value,
-    email: form.email.value,
-    telephone: form.telephone.value
-  };
+          <div>
+              <label for="telephone">Téléphone</label>
+              <input type="text" name="telephone" id="telephone" placeholder="Ex : 0605040302" required>
+          </div>
+          <button type="submit">Envoyer</button>
 
-  try {
-    const response = await fetch("../back/routeur.php?action=store", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    });
+      </form>
+  </section>
 
-    const result = await response.json();
+  <div id="notification"></div>
+`;
 
-    if (result.success) {
-      alert("Contact ajouté !");
-      form.reset();
-      Index();
+
+// Constantes pour utiliser les différents champs du formulaire
+const firstNameInput = document.getElementById('prenom');
+const surnameInput = document.getElementById('nom');
+const emailInput = document.getElementById('email');
+const phoneInput = document.getElementById('telephone');
+
+
+// Expressions régulières pour tester le mail et le numéro de téléphone
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const phoneRegex = /^0[1-9]\d{8}$/;
+
+
+// Ecouteurs d'évènements pour vérifier en direct la saisie de l'utilisateur
+emailInput.addEventListener('input', function() {
+    if (!emailInput.value.match(emailRegex)) {
+        showError('error', "Adresse mail invalide");
     } else {
-      alert("Erreur");
+        hideError('error');
     }
-  } catch (error) {
-    console.error(error);
-  }
+});
+
+phoneInput.addEventListener('input', function() {
+    if (!phoneInput.value.match(phoneRegex)) {
+        showError('error', "Numéro de téléphone invalide");
+    } else {
+        hideError('error');
+    }
+});
+
+
+// Lorque le formulaire est soumis
+document.getElementById("contactForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    // Récupération des valeurs du formulaire en enlevant les espaces en début et fin de chaîne
+    const firstName = firstNameInput.value.trim();
+    const surname = surnameInput.value.trim();
+    const email = emailInput.value.trim();
+    const phone = phoneInput.value.trim();
+
+    // On vérifie de nouveau avec les expressions régulières
+    if (!emailInput.value.match(emailRegex)) {
+        showError('error', "Adresse mail invalide");
+        return;
+    }
+
+    if (!phoneInput.value.match(phoneRegex)) {
+        showError('error', "Numéro de téléphone invalide");
+        return;
+    }
+
+    // Si les données sont correctes, on peut les stocker
+    const data = {prenom: firstName, nom: surname, email: email, telephone: phone};
+
+    try {
+        // Appel API et envoi des données
+        const response = await fetch("../back/routeur.php?action=store", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showNotification("Contact ajouté !", "green");
+            form.reset();
+            Index();
+        } else {
+            showNotification("Erreur", "red");
+        }
+    } catch (error) {
+      console.error(error);
+    }
 });
