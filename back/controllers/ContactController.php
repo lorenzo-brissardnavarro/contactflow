@@ -3,12 +3,28 @@ namespace App\Controllers;
 
 use App\Models\Contact;
 
-class ContactController
-{
-    public function index(){
+class ContactController{
+    
+    public function index() {
+        if(isset($_GET['page'])){
+            $page = (int) $_GET['page'];
+        } else {
+            $page = 1;
+        }
+
+        if(isset($_GET['limit'])){
+            $limit = (int) $_GET['limit'];
+        } else {
+            $limit = 3;
+        }
+
+        $offset = ($page - 1) * $limit;
+
         $contact = new Contact();
-        $data = $contact->index();
-        echo json_encode(["success" => true, "data" => $data]);
+        $data = $contact->getPaginated($limit, $offset);
+        $total = $contact->countAll();
+
+        echo json_encode(['success' => true, 'data' => $data, 'total' => $total]);
     }
 
     public function store(){

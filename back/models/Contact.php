@@ -38,4 +38,21 @@ class Contact extends Database
         $query = $this->getConnection()->prepare($sql);
         return $query->execute([':id' => $id]);
     }
+
+    public function getPaginated($limit, $offset) {
+        $sql = "SELECT * FROM contacts LIMIT :limit OFFSET :offset";
+        $query = $this->getConnection()->prepare($sql);
+        $query->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+        $query->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function countAll() {
+        $sql = "SELECT COUNT(*) as total FROM contacts";
+        $query = $this->getConnection()->query($sql);
+        $result = $query->fetch();
+        $countContacts = (int) $result['total'];
+        return $countContacts;
+    }
 }

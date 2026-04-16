@@ -1,9 +1,12 @@
 const main = document.getElementById("main");
 
-// On affiche l'ensemble des contacts
 async function Index() {
+    const url = new URLSearchParams(window.location.search);
+    const currentPage = parseInt(url.get("page")) || 1;
+    const limit = 3;
+
     try {
-        const res = await fetch("../back/routeur.php?action=index");
+        const res = await fetch(`../back/routeur.php?action=index&page=${currentPage}&limit=${limit}`);
         const result = await res.json();
 
         main.innerHTML = "";
@@ -28,13 +31,17 @@ async function Index() {
             });
 
             main.appendChild(container);
+
+            renderPagination(result.total, currentPage, limit);
+
         } else {
             console.error(result.message);
         }
 
     } catch (error) {
-      console.error("Erreur réseau", error);
+        console.error("Erreur réseau", error);
     }
 }
 
 Index();
+
