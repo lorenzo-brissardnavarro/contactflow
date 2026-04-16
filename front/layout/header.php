@@ -10,4 +10,3 @@
     <header>
 
     </header>
-    <main id="main">

@@ -1,23 +1,22 @@
+// Fonction pour supprimer le contact en utilisant l'ID
 async function Remove(id) {
-    const data = {
-    id: id
-    };
   try {
     const response = await fetch("../back/routeur.php?action=remove", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({data})
+      body: JSON.stringify({ id })
     });
 
     const result = await response.json();
+    console.log(result);
 
     if (result.success) {
-      alert("Contact supprimé !");
-      Index();
+        showNotification("Contact supprimé !", "green");
+        Index();
     } else {
-      alert("Erreur");
+        showNotification("Erreur", "red");
     }
   } catch (error) {
     console.error(error);
