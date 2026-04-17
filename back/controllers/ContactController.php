@@ -18,11 +18,17 @@ class ContactController{
             $limit = 3;
         }
 
+        if(isset($_GET['keyword'])){
+            $keyword = $_GET['keyword'];
+        } else {
+            $keyword = "";
+        }
+
         $offset = ($page - 1) * $limit;
 
         $contact = new Contact();
-        $data = $contact->getPaginated($limit, $offset);
-        $total = $contact->countAll();
+        $data = $contact->getPaginated($limit, $offset, $keyword);
+        $total = $contact->countAll($keyword);
 
         echo json_encode(['success' => true, 'data' => $data, 'total' => $total]);
     }

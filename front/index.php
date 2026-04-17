@@ -1,5 +1,8 @@
 <?php include __DIR__ . '/layout/header.php'; ?>
 
+    <input type="text" id="search" placeholder="Rechercher un contact...">
+    <div id="suggestions"></div>
+
     <button onclick="showStoreForm()">Créer un nouveau contact</button> 
 
     <main id="main"></main>

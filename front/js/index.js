@@ -4,9 +4,10 @@ async function Index() {
     const url = new URLSearchParams(window.location.search);
     const currentPage = parseInt(url.get("page")) || 1;
     const limit = 3;
+    const keyword = url.get("keyword") || "";
 
     try {
-        const res = await fetch(`../back/routeur.php?action=index&page=${currentPage}&limit=${limit}`);
+        const res = await fetch(`../back/routeur.php?action=index&page=${currentPage}&limit=${limit}&keyword=${keyword}`);
         const result = await res.json();
 
         main.innerHTML = "";
@@ -45,4 +46,34 @@ async function Index() {
 }
 
 Index();
+
+const searchInput = document.getElementById("search");
+const suggestions = document.getElementById("suggestions");
+
+searchInput.addEventListener("input", async () => {
+    const value = searchInput.value;
+
+    if (value.length < 2) {
+        suggestions.innerHTML = "";
+        return;
+    }
+
+    const res = await fetch(`../back/routeur.php?action=index&keyword=${value}&limit=5&page=1`);
+    const result = await res.json();
+
+    suggestions.innerHTML = "";
+
+    result.data.forEach(contact => {
+        const div = document.createElement("div");
+        div.textContent = `${contact.prenom} ${contact.nom}`;
+        
+        div.addEventListener("click", () => {
+            searchInput.value = div.textContent;
+            suggestions.innerHTML = "";
+            window.location.search = `?keyword=${value}&page=1`;
+        });
+
+        suggestions.appendChild(div);
+    });
+});
 
