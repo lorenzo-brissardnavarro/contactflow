@@ -69,4 +69,15 @@ class ContactController{
         $success = $contact->remove($id);
         echo json_encode(['success' => $success]);
     }
+
+    public function like() {
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        $id = $data['id'];
+        $contact = new Contact();
+        $current = (int) $contact->getFavorite($id);
+        $newFavorite = $current === 1 ? 0 : 1;
+        $success = $contact->updateFavorite($id, $newFavorite);
+        echo json_encode(['success' => $success, 'favoris' => $newFavorite]);
+    }
 }

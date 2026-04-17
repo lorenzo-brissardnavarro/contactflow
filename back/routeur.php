@@ -21,6 +21,7 @@ switch ($action) {
     case 'store': $controller->store(); break;
     case 'edit': $controller->edit(); break;
     case 'remove':  $controller->remove(); break;
+    case 'like':  $controller->like(); break;
     default:
         echo json_encode(['success' => false, 'message' => 'Action inconnue']);
 }

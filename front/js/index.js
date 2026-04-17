@@ -23,6 +23,7 @@ async function Index() {
                   <h3>${contact.prenom} ${contact.nom}</h3>
                   <p>Email : ${contact.email}</p>
                   <p>Téléphone : ${contact.telephone}</p>
+                  <button class="${contact.favoris == 1 ? 'liked' : ''}" onclick="updateLike(${contact.id}, this)"><i class="fa-solid fa-star"></i></button>
                   <button onclick="showEditForm(${contact.id}, '${contact.prenom}', '${contact.nom}', '${contact.email}', '${contact.telephone}')">Modifier</button>
                   <button onclick="Remove(${contact.id})">Supprimer</button>
                 `;

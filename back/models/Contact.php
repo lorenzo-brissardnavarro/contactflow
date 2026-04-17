@@ -22,9 +22,9 @@ class Contact extends Database
     }
 
     public function store(array $dataContact): bool{
-        $sql = "INSERT INTO contacts (prenom, nom, email, telephone) VALUES (:prenom, :nom, :email, :telephone)";
+        $sql = "INSERT INTO contacts (prenom, nom, email, telephone, favoris) VALUES (:prenom, :nom, :email, :telephone, :favoris)";
         $query = $this->getConnection()->prepare($sql);
-        return $query->execute([':prenom' => $dataContact['prenom'], ':nom' => $dataContact['nom'], ':email' => $dataContact['email'], ':telephone' => $dataContact['telephone']]);
+        return $query->execute([':prenom' => $dataContact['prenom'], ':nom' => $dataContact['nom'], ':email' => $dataContact['email'], ':telephone' => $dataContact['telephone'], ':favoris' => 0]);
     }
 
     public function edit(int $id, array $dataContact): bool{
@@ -55,4 +55,18 @@ class Contact extends Database
         $countContacts = (int) $result['total'];
         return $countContacts;
     }
+
+    public function updateFavorite($id, $favorite): bool {
+        $sql = "UPDATE contacts SET favoris = :favoris WHERE id = :id";
+        $query = $this->getConnection()->prepare($sql);
+        $query->execute([':favoris' => $favorite ? 1 : 0, ':id' => $id]);
+        return true;
+    }
+
+    public function getFavorite($id){
+        $sql = "SELECT favoris FROM contacts WHERE id = :id";
+        $query = $this->getConnection()->prepare($sql);
+        $query->execute([':id' => $id]);
+    return $query->fetchColumn();
+}
 }
