@@ -2,7 +2,7 @@
 async function Remove(id) {
   try {
     const response = await fetch("../back/routeur.php?action=remove", {
-      method: "POST",
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json"
       },

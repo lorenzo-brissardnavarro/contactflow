@@ -1,7 +1,7 @@
 async function updateLike(id, element){
     try {
     const response = await fetch("../back/routeur.php?action=like", {
-      method: "POST",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json"
       },

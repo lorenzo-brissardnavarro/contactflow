@@ -83,7 +83,7 @@ async function updateContact(id) {
 
     try {
       const response = await fetch("../back/routeur.php?action=edit", {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json"
         },
