@@ -1,5 +1,5 @@
+const pagination = document.querySelector(".pagination");
 function renderPagination(total, currentPage, limit) {
-    const pagination = document.querySelector(".pagination");
     const pages = Math.ceil(total / limit);
 
     const url = new URLSearchParams(window.location.search);
@@ -18,8 +18,8 @@ function renderPagination(total, currentPage, limit) {
 
     for (let i = 1; i <= pages; i++) {
         pagination.innerHTML += `
-            <li class="${currentPage === i ? "active" : ""}">
-                <a href="?page=${i}${keywordParam}">${i}</a>
+            <li>
+                <a href="?page=${i}${keywordParam}" class="${currentPage === i ? "active" : ""}">${i}</a>
             </li>
         `;
     }

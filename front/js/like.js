@@ -12,9 +12,9 @@ async function updateLike(id, element){
 
     if (result.success) {
         if (result.favoris === 1) {
-            element.classList.add("liked");
+            element.classList.add("favorite");
         } else {
-            element.classList.remove("liked");
+            element.classList.remove("favorite");
         }
     }
   } catch (error) {

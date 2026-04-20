@@ -1,7 +1,9 @@
 // Fonction pour afficher le formulaire pré-rempli
 function showEditForm(id, prenom, nom, email, telephone) {
-  main.innerHTML = `
-  <section>
+    headerActions.innerHTML = "";
+    pagination.innerHTML = "";
+    main.innerHTML = `
+    <section>
       <h2>Modifier le contact</h2>
       <p id="error" class="error hidden"></p>
 

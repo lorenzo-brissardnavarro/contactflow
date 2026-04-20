@@ -4,6 +4,8 @@ const phoneRegex = /^0[1-9]\d{8}$/;
 
 // Affichage du formulaire d'ajout de contact
 function showStoreForm() {
+    headerActions.innerHTML = "";
+    pagination.innerHTML = "";
     main.innerHTML = `
     <section>
         <h2>Ajouter un nouveau contact</h2>

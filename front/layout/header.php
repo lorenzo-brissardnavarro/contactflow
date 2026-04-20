@@ -10,6 +10,15 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <header>
-
-    </header>
+    <div class="container">
+        <header class="header">
+            <h1>ContactFlow</h1>
+            <nav class="nav">
+                <button class="active">Contacts</button>
+                <button>Favoris</button>
+                <button>Exporter CSV</button>
+            </nav>
+        </header>
+        <div id="header-actions"></div>
+    
+    
