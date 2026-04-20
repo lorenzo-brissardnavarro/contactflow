@@ -39,14 +39,30 @@ class Contact extends Database
         return $query->execute([':id' => $id]);
     }
 
-    public function getPaginated($limit, $offset, $keyword = '') {
+    public function getPaginated($limit, $offset, $keyword = '', $favorite = 0) {
+        $sql = "SELECT * FROM contacts";
+        $conditions = [];
+        $params = [];
+
         if ($keyword !== '') {
-            $sql = "SELECT * FROM contacts WHERE prenom LIKE :keyword OR nom LIKE :keyword OR email LIKE :keyword LIMIT :limit OFFSET :offset";
-            $query = $this->getConnection()->prepare($sql);
-            $query->bindValue(':keyword', "%$keyword%");
-        } else {
-            $sql = "SELECT * FROM contacts LIMIT :limit OFFSET :offset";
-            $query = $this->getConnection()->prepare($sql);
+            $conditions[] = "(prenom LIKE :keyword OR nom LIKE :keyword OR email LIKE :keyword)";
+            $params[':keyword'] = "%$keyword%";
+        }
+
+        if ($favorite == 1) {
+            $conditions[] = "favoris = :favorite";
+            $params[':favorite'] = 1;
+        }
+
+        if (!empty($conditions)) {
+            $sql .= " WHERE " . implode(" AND ", $conditions);
+        }
+
+        $sql .= " LIMIT :limit OFFSET :offset";
+
+        $query = $this->getConnection()->prepare($sql);
+        foreach ($params as $key => $value) {
+            $query->bindValue($key, $value);
         }
         $query->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
         $query->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
@@ -54,19 +70,32 @@ class Contact extends Database
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function countAll($keyword = '') {
+    public function countAll($keyword = '', $favorite = 0) {
+        $sql = "SELECT COUNT(*) as total FROM contacts";
+        $conditions = [];
+        $params = [];
+
         if ($keyword !== '') {
-            $sql = "SELECT COUNT(*) as total FROM contacts WHERE prenom LIKE :keyword OR nom LIKE :keyword OR email LIKE :keyword";
-            $query = $this->getConnection()->prepare($sql);
-            $query->bindValue(':keyword', "%$keyword%");
-            $query->execute();
-            $result = $query->fetch();
-        } else {
-            $sql = "SELECT COUNT(*) as total FROM contacts";
-            $query = $this->getConnection()->query($sql);
-            $result = $query->fetch();
+            $conditions[] = "(prenom LIKE :keyword OR nom LIKE :keyword OR email LIKE :keyword)";
+            $params[':keyword'] = "%$keyword%";
         }
-        return (int) $result['total'];
+
+        if ($favorite == 1) {
+            $conditions[] = "favoris = :favorite";
+            $params[':favorite'] = 1;
+        }
+
+        if (!empty($conditions)) {
+            $sql .= " WHERE " . implode(" AND ", $conditions);
+        }
+
+        $query = $this->getConnection()->prepare($sql);
+        foreach ($params as $key => $value) {
+            $query->bindValue($key, $value);
+        }
+        $query->execute();
+        $result = $query->fetch();
+        return (int)$result['total'];
     }
 
     public function updateFavorite($id, $favorite): bool {
@@ -81,5 +110,6 @@ class Contact extends Database
         $query = $this->getConnection()->prepare($sql);
         $query->execute([':id' => $id]);
     return $query->fetchColumn();
-}
+    }
+
 }

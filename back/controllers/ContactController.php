@@ -24,11 +24,17 @@ class ContactController{
             $keyword = "";
         }
 
+        if(isset($_GET['favorite'])){
+            $favorite = 1;
+        } else {
+            $favorite = 0;
+        }
+
         $offset = ($page - 1) * $limit;
 
         $contact = new Contact();
-        $data = $contact->getPaginated($limit, $offset, $keyword);
-        $total = $contact->countAll($keyword);
+        $data = $contact->getPaginated($limit, $offset, $keyword, $favorite);
+        $total = $contact->countAll($keyword, $favorite);
 
         echo json_encode(['success' => true, 'data' => $data, 'total' => $total]);
     }

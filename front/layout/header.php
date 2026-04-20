@@ -12,11 +12,13 @@
 <body>
     <div class="container">
         <header class="header">
-            <h1>ContactFlow</h1>
+            <a href="../index.php">
+               <h1>ContactFlow</h1> 
+            </a>
             <nav class="nav">
-                <button class="active">Contacts</button>
-                <button>Favoris</button>
-                <button>Exporter CSV</button>
+                <button id="btn-contacts" class="active">Contacts</button>
+                <button id="btn-favorites">Favoris</button>
+                <button id="btn-export">Exporter CSV</button>
             </nav>
         </header>
         <div id="header-actions"></div>

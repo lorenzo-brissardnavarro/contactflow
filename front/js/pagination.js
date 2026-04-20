@@ -11,7 +11,7 @@ function renderPagination(total, currentPage, limit) {
     if (currentPage !== 1) {
         pagination.innerHTML += `
             <li>
-                <a href="?page=${currentPage - 1}${keywordParam}">Précédente</a>
+                <a href="?page=${currentPage - 1}${keywordParam}${isFavorite ? "&favorite=1" : ""}">Précédente</a>
             </li>
         `;
     }
@@ -19,15 +19,15 @@ function renderPagination(total, currentPage, limit) {
     for (let i = 1; i <= pages; i++) {
         pagination.innerHTML += `
             <li>
-                <a href="?page=${i}${keywordParam}" class="${currentPage === i ? "active" : ""}">${i}</a>
+                <a href="?page=${i}${keywordParam}${isFavorite ? "&favorite=1" : ""}" class="${currentPage === i ? "active" : ""}">${i}</a>
             </li>
         `;
     }
 
-    if (currentPage !== pages) {
+    if (currentPage < pages) {
         pagination.innerHTML += `
             <li>
-                <a href="?page=${currentPage + 1}${keywordParam}">Suivante</a>
+                <a href="?page=${currentPage + 1}${keywordParam}${isFavorite ? "&favorite=1" : ""}">Suivante</a>
             </li>
         `;
     }

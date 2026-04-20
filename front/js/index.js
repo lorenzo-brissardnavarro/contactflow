@@ -6,9 +6,10 @@ async function Index() {
     const currentPage = parseInt(url.get("page")) || 1;
     const limit = 3;
     const keyword = url.get("keyword") || "";
+    const favoriteParam = isFavorite ? "&favorite=1" : "";
 
     try {
-        const res = await fetch(`../back/routeur.php?action=index&page=${currentPage}&limit=${limit}&keyword=${keyword}`);
+        const res = await fetch(`../back/routeur.php?action=index&page=${currentPage}&limit=${limit}&keyword=${keyword}${favoriteParam}`);
         const result = await res.json();
 
         headerActions.innerHTML = "";
@@ -68,6 +69,7 @@ Index();
 function initSearch(){
     const searchInput = document.getElementById("search");
     const suggestions = document.getElementById("suggestions");
+    const favoriteParam = isFavorite ? "&favorite=1" : "";
 
     searchInput.addEventListener("input", async () => {
         const value = searchInput.value;
@@ -77,7 +79,7 @@ function initSearch(){
             return;
         }
 
-        const res = await fetch(`../back/routeur.php?action=index&keyword=${value}&limit=5&page=1`);
+        const res = await fetch(`../back/routeur.php?action=index&keyword=${value}&limit=5&page=1${favoriteParam}`);
         const result = await res.json();
 
         suggestions.innerHTML = "";
@@ -89,7 +91,7 @@ function initSearch(){
             div.addEventListener("click", () => {
                 searchInput.value = div.textContent;
                 suggestions.innerHTML = "";
-                window.location.search = `?keyword=${value}&page=1`;
+                window.location.search = `?keyword=${value}&page=1${isFavorite ? "&favorite=1" : ""}`;
             });
 
             suggestions.appendChild(div);
