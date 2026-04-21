@@ -1,5 +1,4 @@
 <?php
-header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: http://localhost');
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: GET, POST, PATCH, DELETE, OPTIONS');
@@ -15,6 +14,10 @@ use App\Controllers\ContactController;
 
 $controller = new ContactController();
 $action = $_GET['action'] ?? '';
+
+if ($action !== 'export') {
+    header('Content-Type: application/json');
+}
 
 switch ($action) {
     case 'index':
@@ -40,6 +43,11 @@ switch ($action) {
     case 'like':
         if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
             $controller->like();
+        }
+        break;
+    case 'export':
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $controller->exportCSV();
         }
         break;
     default:

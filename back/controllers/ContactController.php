@@ -37,6 +37,7 @@ class ContactController{
         $total = $contact->countAll($keyword, $favorite);
 
         echo json_encode(['success' => true, 'data' => $data, 'total' => $total]);
+        exit;
     }
 
     public function store(){
@@ -50,6 +51,7 @@ class ContactController{
         $contact = new Contact();
         $success = $contact->store($data);
         echo json_encode(['success' => $success]);
+        exit;
     }
 
     public function edit(){
@@ -65,6 +67,7 @@ class ContactController{
         $contact = new Contact();
         $success = $contact->edit($id, $data);
         echo json_encode(['success' => $success]);
+        exit;
     }
 
     public function remove(){
@@ -80,6 +83,7 @@ class ContactController{
         $contact = new Contact();
         $success = $contact->remove($id);
         echo json_encode(['success' => $success]);
+        exit;
     }
 
     public function like() {
@@ -91,5 +95,32 @@ class ContactController{
         $newFavorite = $current === 1 ? 0 : 1;
         $success = $contact->updateFavorite($id, $newFavorite);
         echo json_encode(['success' => $success, 'favoris' => $newFavorite]);
+        exit;
+    }
+
+    public function exportCSV() {
+        $contact = new Contact();
+        $data = $contact->index();
+
+        $delimiter = ",";
+        $filename = "contacts_" . date('Y-m-d') . ".csv";
+
+        // Indique que le fichier doit être téléchargé avec le nom défini.
+        header("Content-disposition: attachment; filename=$filename");
+        // Définit le type de contenu comme CSV
+        header("Content-Type: text/csv");
+
+        $fp = fopen("php://output", 'w');
+
+        // en-têtes
+        fputcsv($fp, ['Id', 'Prénom', 'Nom', 'Email', 'Téléphone', 'Favoris']);
+
+        foreach ($data as $row) {
+            $lineData = array($row['id'], $row['prenom'], $row['nom'], $row['email'], $row['telephone'], $row['favoris']);
+            fputcsv($fp, $lineData, $delimiter);
+        }
+
+        fclose($fp);
+        exit;
     }
 }
