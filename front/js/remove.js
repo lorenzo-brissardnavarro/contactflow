@@ -14,7 +14,9 @@ async function Remove(id) {
 
     if (result.success) {
         showNotification("Contact supprimé !", "green");
-        Index();
+        setTimeout(() => {
+            Index();
+        }, 1000);
     } else {
         showNotification("Erreur", "red");
     }

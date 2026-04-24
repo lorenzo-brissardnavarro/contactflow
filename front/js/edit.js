@@ -30,9 +30,7 @@ function showEditForm(id, prenom, nom, email, telephone) {
           <button type="submit">Envoyer</button>
 
       </form>
-  </section>
-
-  <div id="notification"></div>`;
+  </section>`;
 
   document.getElementById("editForm").addEventListener("submit", (e) => {
     e.preventDefault();
@@ -96,7 +94,9 @@ async function updateContact(id) {
 
       if (result.success) {
           showNotification("Contact modifié !", "green");
-          Index();
+          setTimeout(() => {
+            Index();
+          }, 1000);
       } else {
           showNotification("Erreur", "red");
       }

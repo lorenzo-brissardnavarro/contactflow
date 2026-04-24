@@ -34,9 +34,7 @@ function showStoreForm() {
             <button type="submit">Envoyer</button>
 
         </form>
-    </section>
-
-    <div id="notification"></div>`;
+    </section>`;
 
     // Constantes pour utiliser les différents champs du formulaire
     const firstNameInput = document.getElementById('prenom');
@@ -101,7 +99,9 @@ function showStoreForm() {
             if (result.success) {
                 showNotification("Contact ajouté !", "green");
                 document.getElementById("contactForm").reset();
-                Index();
+                setTimeout(() => {
+                    Index();
+                }, 1000);
             } else {
                 showNotification("Erreur", "red");
             }

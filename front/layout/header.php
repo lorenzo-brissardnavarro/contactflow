@@ -22,5 +22,6 @@
             </nav>
         </header>
         <div id="header-actions"></div>
+        <div id="notification"></div>
     
     
